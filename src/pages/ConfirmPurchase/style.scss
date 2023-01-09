@@ -1,0 +1,7 @@
+.my-subscription {
+  &-content {
+    background: var(--black);
+    height: calc(100vh - 55px);
+    overflow: auto;
+  }
+}

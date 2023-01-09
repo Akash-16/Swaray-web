@@ -1,0 +1,27 @@
+@import "../../assets/style/includes";
+
+.view-balance-page {
+  position: relative;
+  height: calc(100vh - 55px);
+  .view-balance-cards {
+    height: calc(100vh - 360px);
+    overflow: auto;
+  }
+  .purchase-button {
+    height: 70px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+}
+
+.batch {
+  display: inline-block;
+  @include sizing(6px, 8px);
+  &-earn {
+    background: var(--success);
+  }
+  &-purchase {
+    background: var(--process);
+  }
+}
