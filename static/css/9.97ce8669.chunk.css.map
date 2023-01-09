@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/pages/PointsPackageDetails/style.scss"],"names":[],"mappings":"AACE,yBACE,uBAAwB,CACxB,yBAA0B,CAC1B,aAAc","file":"9.97ce8669.chunk.css","sourcesContent":[".my-subscription {\n  &-content {\n    background: var(--black);\n    height: calc(100vh - 55px);\n    overflow: auto;\n  }\n}\n"]}
