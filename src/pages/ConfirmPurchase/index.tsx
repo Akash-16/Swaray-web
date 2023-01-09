@@ -47,14 +47,16 @@ const ConfirmPurchase = () => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { isLoading }: UserDetails = useSelector((state: LoggedInUser) => state?.userDetails);
+  const { isLoading }: UserDetails = useSelector(
+    (state: LoggedInUser) => state?.userDetails
+  );
 
   const { selectedPoints, subscription } = state as Istate;
 
   const {
     data,
     isLoading: cardLoading,
-    refetch
+    refetch,
   } = useQuery('cardsList', () => Client.get(apiRoutes.cardList));
 
   const cardsList: CardsDetails[] = data?.data.data;
@@ -65,25 +67,28 @@ const ConfirmPurchase = () => {
       productId: subscription
         ? selectedPoints.stripeProductId.subscription
         : selectedPoints.stripeProductId.oneTime,
-      paymentMethod: subscription ? PaymentType.SUBSCRIPTION : PaymentType.PAYMENT,
-      currency: Currency.USD
+      paymentMethod: subscription
+        ? PaymentType.SUBSCRIPTION
+        : PaymentType.PAYMENT,
+      currency: Currency.USD,
     };
     const response = await Client.post(apiRoutes.stripeCheckout, paymentBody);
     if (response.data) {
       setLoading(false);
+      // eslint-disable-next-line no-restricted-globals
       location.href = response.data.data;
     } else {
       setLoading(false);
       const {
         response: {
-          data: { message, statusCode }
-        }
+          data: { message, statusCode },
+        },
       } = response as AxiosError | any;
 
       enqueueSnackbar(message, {
         preventDuplicate: false,
         persist: false,
-        variant: 'error'
+        variant: 'error',
       });
     }
   };
@@ -96,7 +101,7 @@ const ConfirmPurchase = () => {
         enqueueSnackbar(SuccessMessage.removeCard, {
           preventDuplicate: false,
           persist: false,
-          variant: 'error'
+          variant: 'error',
         });
         refetch();
       }
@@ -104,7 +109,7 @@ const ConfirmPurchase = () => {
       enqueueSnackbar(Errors.appError, {
         preventDuplicate: false,
         persist: false,
-        variant: 'error'
+        variant: 'error',
       });
     } finally {
       setLoading(false);
@@ -113,33 +118,43 @@ const ConfirmPurchase = () => {
 
   return (
     <>
-      <div className="my-subscription-content p-24">
-        <div className="d-flex flex-column justify-between h-100">
+      <div className='my-subscription-content p-24'>
+        <div className='d-flex flex-column justify-between h-100'>
           <div>
-            <h3 className="f-18 f-w-500 l-h-normal txt-primary text-center mb-24">Checkout</h3>
+            <h3 className='f-18 f-w-500 l-h-normal txt-primary text-center mb-24'>
+              Checkout
+            </h3>
 
-            <CartHeader selectedPoints={selectedPoints} subscription={subscription} />
+            <CartHeader
+              selectedPoints={selectedPoints}
+              subscription={subscription}
+            />
 
             {/* Subtotal Page Details */}
-            <div className="my-20">
-              <div className="border-top-light py-16">
-                <div className="d-flex justify-between">
-                  <p className="f-16 f-w-400 l-h-normal txt-primary">Subtotal</p>
-                  <p className="f-16 f-w-400 l-h-normal txt-color-primary">
+            <div className='my-20'>
+              <div className='border-top-light py-16'>
+                <div className='d-flex justify-between'>
+                  <p className='f-16 f-w-400 l-h-normal txt-primary'>
+                    Subtotal
+                  </p>
+                  <p className='f-16 f-w-400 l-h-normal txt-color-primary'>
                     ${selectedPoints.cost}
                   </p>
                 </div>
-                <div className="d-flex justify-between mt-10">
-                  <p className="f-16 f-w-400 l-h-normal txt-primary">
-                    Processing Fee <span className="f-12">(30 cents + 2.9%)</span>
+                <div className='d-flex justify-between mt-10'>
+                  <p className='f-16 f-w-400 l-h-normal txt-primary'>
+                    Processing Fee{' '}
+                    <span className='f-12'>(30 cents + 2.9%)</span>
                   </p>
-                  <p className="f-16 f-w-400 l-h-normal txt-color-primary">$0.51</p>
+                  <p className='f-16 f-w-400 l-h-normal txt-color-primary'>
+                    $0.51
+                  </p>
                 </div>
               </div>
 
-              <div className="d-flex justify-between py-12 border-top-light border-bottom-light">
-                <p className="f-16 f-w-700 l-h-normal txt-primary">Total</p>
-                <p className="f-16 f-w-400 l-h-normal txt-color-primary">
+              <div className='d-flex justify-between py-12 border-top-light border-bottom-light'>
+                <p className='f-16 f-w-700 l-h-normal txt-primary'>Total</p>
+                <p className='f-16 f-w-400 l-h-normal txt-color-primary'>
                   ${selectedPoints.totalAmount}
                 </p>
               </div>
@@ -147,34 +162,42 @@ const ConfirmPurchase = () => {
 
             {/* Card Details */}
             <div>
-              <p className="f-18 f-w-500 l-h-normal txt-primary">Payment Details</p>
+              <p className='f-18 f-w-500 l-h-normal txt-primary'>
+                Payment Details
+              </p>
               {cardsList?.length ? (
-                <p className="f-14 f-w-400 l-h-normal txt-primary mt-20 mb-16">
+                <p className='f-14 f-w-400 l-h-normal txt-primary mt-20 mb-16'>
                   Your Save Card Details
                 </p>
               ) : (
-                <p className="f-14 f-w-400 l-h-normal txt-primary mt-20 mb-16 text-center">
+                <p className='f-14 f-w-400 l-h-normal txt-primary mt-20 mb-16 text-center'>
                   Card not found
                 </p>
               )}
 
               {cardsList?.map((item, index) => (
-                <div key={index} className="d-flex align-center justify-between mb-16">
+                <div
+                  key={index}
+                  className='d-flex align-center justify-between mb-16'
+                >
                   <div>
-                    <p className="f-14 f-w-400 l-h-normal txt-tertiary mb-6">
+                    <p className='f-14 f-w-400 l-h-normal txt-tertiary mb-6'>
                       {item.isCreditCard ? 'Credit Card' : 'Debit Card'}
                     </p>
-                    <p className="f-14 f-w-400 l-h-normal txt-primary">{item.nameOnCard}</p>
-                    <p className="f-14 f-w-400 l-h-normal txt-primary mt-4">
+                    <p className='f-14 f-w-400 l-h-normal txt-primary'>
+                      {item.nameOnCard}
+                    </p>
+                    <p className='f-14 f-w-400 l-h-normal txt-primary mt-4'>
                       .... .... .... {item.cardNumber}
                     </p>
-                    <p className="f-14 f-w-400 l-h-normal txt-tertiary mt-6">{`${item.expiryMonth}/${item.expiryYear}`}</p>
+                    <p className='f-14 f-w-400 l-h-normal txt-tertiary mt-6'>{`${item.expiryMonth}/${item.expiryYear}`}</p>
                   </div>
                   <Button
                     onClick={() => removeCard(item.cardId)}
-                    variant="contained"
-                    color="primary"
-                    size="small">
+                    variant='contained'
+                    color='primary'
+                    size='small'
+                  >
                     Remove Card
                   </Button>
                 </div>
@@ -215,14 +238,15 @@ const ConfirmPurchase = () => {
 
             <PaymentTerms />
           </div>
-          <div className="pb-24">
+          <div className='pb-24'>
             {/* Add card payments */}
             <Button
               onClick={makePayment}
-              variant="contained"
-              color="secondary"
-              size="large"
-              fullWidth>
+              variant='contained'
+              color='secondary'
+              size='large'
+              fullWidth
+            >
               Confirm Purchase
             </Button>
           </div>

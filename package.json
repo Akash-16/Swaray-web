@@ -63,6 +63,7 @@
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
     "eslint": "^7.11.0",
-    "eslint-plugin-react": "^7.31.1"
+    "eslint-plugin-react": "^7.31.1",
+    "gh-pages": "^4.0.0"
   }
 }

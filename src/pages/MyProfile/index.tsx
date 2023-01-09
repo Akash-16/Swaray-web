@@ -64,7 +64,8 @@ const MyUserProfile = () => {
     const connectWallet = localStorage.getItem('walletconnect');
     if (provider || connectWallet) {
       activate(ConnectWallet, (error) => {
-        console.log(error), localStorage.removeItem('provider');
+        console.log(error);
+        localStorage.removeItem('provider');
       });
     }
   }, []);
@@ -72,11 +73,11 @@ const MyUserProfile = () => {
   const signOutUser = async () => {
     setIsLoading(true);
     const { data: token } = await Client.patch(apiRoutes.trustDevice, {
-      deviceId
+      deviceId,
     });
 
     const { data } = await Client.post(apiRoutes.signOut, {
-      refreshToken: token.data?.refreshToken?.token
+      refreshToken: token.data?.refreshToken?.token,
     });
     setIsLoading(false);
     if (data?.statusCode === HttpStatus.OK) {
@@ -92,19 +93,19 @@ const MyUserProfile = () => {
     if (provider && account) {
       const { data } = await Client.post(apiRoutes.cryptoWallets, {
         address: account,
-        type: provider
+        type: provider,
       });
       if (data?.data) {
         enqueueSnackbar(SuccessMessage.WallectConnect, {
           preventDuplicate: true,
           variant: 'success',
-          persist: false
+          persist: false,
         });
       } else {
         enqueueSnackbar(Errors.appError, {
           preventDuplicate: true,
           variant: 'error',
-          persist: false
+          persist: false,
         });
       }
     }
@@ -114,7 +115,8 @@ const MyUserProfile = () => {
     if (userDetails.cryptoWallets?.length >= 0) {
       localStorage.setItem('provider', 'walletConnect');
       await activate(ConnectWallet, (error) => {
-        console.log('error', error), localStorage.removeItem('provider');
+        console.log('error', error);
+        localStorage.removeItem('provider');
       });
       await walletConnectApi();
     }
@@ -132,54 +134,61 @@ const MyUserProfile = () => {
 
   return (
     <>
-      <div className="my-profile-content">
-        <div className="profile-header">
-          <div className="profile-image">
-            {userDetails?.background && <img src={userDetails?.background} alt="profile" />}
+      <div className='my-profile-content'>
+        <div className='profile-header'>
+          <div className='profile-image'>
+            {userDetails?.background && (
+              <img src={userDetails?.background} alt='profile' />
+            )}
           </div>
-          <div className="d-flex align-end h-100 px-20 py-16 relative index-2">
-            <div className="mr-12">
+          <div className='d-flex align-end h-100 px-20 py-16 relative index-2'>
+            <div className='mr-12'>
               <Avatar
-                alt="AK"
+                alt='AK'
                 src={userDetails?.profilePhoto}
-                className="profile-img bordered-white"
+                className='profile-img bordered-white'
               />
             </div>
-            <div className="flex-1">
-              <h3 className="f-18 f-w-600 l-h-normal txt-primary">
+            <div className='flex-1'>
+              <h3 className='f-18 f-w-600 l-h-normal txt-primary'>
                 {userDetails?.firstName} {userDetails?.lastName}
               </h3>
-              <p className="f-14 f-w-400 l-h-normal txt-color-primary mt-4">
+              <p className='f-14 f-w-400 l-h-normal txt-color-primary mt-4'>
                 @{userDetails?.username}
               </p>
             </div>
           </div>
         </div>
-        <div className="p-20">
-          <List className="my-profile-menu d-grid g-8">
+        <div className='p-20'>
+          <List className='my-profile-menu d-grid g-8'>
             <ListItem
               onClick={() =>
                 navigate(routes.viewBalance, {
                   state: {
-                    isWalletActive: active
-                  }
+                    isWalletActive: active,
+                  },
                 })
-              }>
-              <div className="d-flex align-center justify-between w-100">
-                <div className="flex-1 d-flex justify-between">
-                  <ListItemText primary="My Balance" />
-                  <div className="d-flex align-center">
-                    <img src={SwarayCoinLogo} alt="" className="img sawaray-coin-img" />
-                    <p className="f-14 f-w-500 l-h-normal txt-primary ml-4">
+              }
+            >
+              <div className='d-flex align-center justify-between w-100'>
+                <div className='flex-1 d-flex justify-between'>
+                  <ListItemText primary='My Balance' />
+                  <div className='d-flex align-center'>
+                    <img
+                      src={SwarayCoinLogo}
+                      alt=''
+                      className='img sawaray-coin-img'
+                    />
+                    <p className='f-14 f-w-500 l-h-normal txt-primary ml-4'>
                       {userDetails?.wallet?.pts}
                     </p>
                   </div>
                 </div>
-                <KeyboardArrowRightIcon className="txt-secondary" />
+                <KeyboardArrowRightIcon className='txt-secondary' />
               </div>
             </ListItem>
             <ListItem>
-              <div className="d-flex justify-between w-100">
+              <div className='d-flex justify-between w-100'>
                 <div className={active ? 'connected-dot' : 'active-dot'} />
                 <ListItemText
                   onClick={walletConnect}
@@ -192,38 +201,44 @@ const MyUserProfile = () => {
                             : account
                         }`
                   }
-                  className="flex-1"
+                  className='flex-1'
                 />
-                <KeyboardArrowRightIcon className="txt-secondary" />
+                <KeyboardArrowRightIcon className='txt-secondary' />
               </div>
             </ListItem>
             <ListItem disabled>
-              <div className="d-flex justify-between w-100">
-                <ListItemText primary="My Fan Pages" className="flex-1" />
-                <KeyboardArrowRightIcon className="txt-secondary" />
+              <div className='d-flex justify-between w-100'>
+                <ListItemText primary='My Fan Pages' className='flex-1' />
+                <KeyboardArrowRightIcon className='txt-secondary' />
               </div>
             </ListItem>
             <ListItem disabled>
-              <div className="d-flex justify-between w-100">
-                <ListItemText primary="Favorites" className="flex-1" />
-                <KeyboardArrowRightIcon className="txt-secondary" />
+              <div className='d-flex justify-between w-100'>
+                <ListItemText primary='Favorites' className='flex-1' />
+                <KeyboardArrowRightIcon className='txt-secondary' />
               </div>
             </ListItem>
             <ListItem disabled>
-              <div className="d-flex justify-between w-100">
-                <ListItemText primary="Monthly subscriptions" className="flex-1" />
-                <KeyboardArrowRightIcon className="txt-secondary" />
+              <div className='d-flex justify-between w-100'>
+                <ListItemText
+                  primary='Monthly subscriptions'
+                  className='flex-1'
+                />
+                <KeyboardArrowRightIcon className='txt-secondary' />
               </div>
             </ListItem>
             <ListItem disabled>
-              <div className="d-flex justify-between w-100">
-                <ListItemText primary="Account settings" className="flex-1" />
-                <KeyboardArrowRightIcon className="txt-secondary" />
+              <div className='d-flex justify-between w-100'>
+                <ListItemText primary='Account settings' className='flex-1' />
+                <KeyboardArrowRightIcon className='txt-secondary' />
               </div>
             </ListItem>
           </List>
-          <div className="text-center mt-32 mb-20">
-            <Button onClick={signOutUser} className="f-16 f-w-500 l-h-normal txt-primary">
+          <div className='text-center mt-32 mb-20'>
+            <Button
+              onClick={signOutUser}
+              className='f-16 f-w-500 l-h-normal txt-primary'
+            >
               Sign out
             </Button>
           </div>
