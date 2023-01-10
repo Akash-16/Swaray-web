@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import { signInWithPhoneNumber, RecaptchaVerifier, ConfirmationResult } from 'firebase/auth';
-import OtpInput from 'react-otp-input';
+import {
+  signInWithPhoneNumber,
+  RecaptchaVerifier,
+  ConfirmationResult,
+} from 'firebase/auth';
+import OtpInput from 'react-otp-input-rc-17';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 
@@ -60,19 +64,23 @@ function VerifyOtpScreen() {
     color: 'white',
     fontSize: '36px',
     fontWeight: 'bold',
-    outline: 'none'
+    outline: 'none',
   };
 
   const sendOtp = async () => {
     const reCaptchaVerifier = new RecaptchaVerifier(
       'request-otp',
       {
-        size: 'normal'
+        size: 'normal',
       },
       app
     );
     const phoneNumber = `+91${state.phoneNumber}`;
-    const getResult = await signInWithPhoneNumber(app, phoneNumber, reCaptchaVerifier);
+    const getResult = await signInWithPhoneNumber(
+      app,
+      phoneNumber,
+      reCaptchaVerifier
+    );
     setverifyOtp(getResult);
   };
 
@@ -83,36 +91,39 @@ function VerifyOtpScreen() {
         ? await verifyOtp?.confirm(otp)
         : await recaptchaDetails.confirm(otp);
       if (!state.isForgotPasswordPage) {
-        const isVerified = await Client.patch(`${apiRoutes.verifyUser}${state.userId}`, {
-          firebaseUid: verified.user.uid,
-          deviceId
-        });
+        const isVerified = await Client.patch(
+          `${apiRoutes.verifyUser}${state.userId}`,
+          {
+            firebaseUid: verified.user.uid,
+            deviceId,
+          }
+        );
         if (isVerified.data.data.isVerified) {
           navigate(routes.trustDevicePage, {
-            state: isVerified.data.data
+            state: isVerified.data.data,
           });
         } else {
           setIsLoading(false);
           enqueueSnackbar(Errors.appError, {
             preventDuplicate: false,
             persist: false,
-            variant: 'error'
+            variant: 'error',
           });
         }
       } else {
         const { data } = await Client.patch(apiRoutes.forgotPassword, {
-          firebaseUid: verified.user.uid
+          firebaseUid: verified.user.uid,
         });
         if (data?.data) {
           navigate(routes.newPassword, {
-            state: data?.data
+            state: data?.data,
           });
         } else {
           setIsLoading(false);
           enqueueSnackbar(Errors.appError, {
             preventDuplicate: false,
             persist: false,
-            variant: 'error'
+            variant: 'error',
           });
         }
       }
@@ -122,14 +133,14 @@ function VerifyOtpScreen() {
 
   return (
     <>
-      <div className="py-50 px-24">
-        <div className="flex-1 d-flex flex-column justify-center text-center">
-          <h1 className="f-28 f-w-700 l-h-normal txt-primary text-center mb-48">
+      <div className='py-50 px-24'>
+        <div className='flex-1 d-flex flex-column justify-center text-center'>
+          <h1 className='f-28 f-w-700 l-h-normal txt-primary text-center mb-48'>
             Enter the code we
             <br /> just texted you 💬
           </h1>
-          <div className="px-40">
-            <FormControl variant="outlined" fullWidth>
+          <div className='px-40'>
+            <FormControl variant='outlined' fullWidth>
               <OtpInput
                 value={otp}
                 onChange={(otp: string) => setOtp(otp)}
@@ -141,14 +152,21 @@ function VerifyOtpScreen() {
             </FormControl>
           </div>
         </div>
-        <div id="request-otp"></div>
-        <div className="w-100 text-center mb-30 mt-80">
+        <div id='request-otp'></div>
+        <div className='w-100 text-center mb-30 mt-80'>
           <Button
             onClick={sendOtp}
-            className="d-inline-block f-18 f-w-700 l-h-22 txt-primary text-center mb-24">
+            className='d-inline-block f-18 f-w-700 l-h-22 txt-primary text-center mb-24'
+          >
             I didn’t receive my code
           </Button>
-          <Button onClick={confirmOtp} variant="contained" color="primary" size="large" fullWidth>
+          <Button
+            onClick={confirmOtp}
+            variant='contained'
+            color='primary'
+            size='large'
+            fullWidth
+          >
             Submit
           </Button>
         </div>
